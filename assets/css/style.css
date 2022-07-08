@@ -1,0 +1,11 @@
+.mdc-top-app-bar{
+    background-color: blue;
+}
+
+.mdc-slider--discrete{
+    color: green;
+}
+
+.mdc-slider__value-indicator-container{
+    color:aliceblue;
+}
