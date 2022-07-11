@@ -55,6 +55,7 @@ function dateSelected(selection)
 
 function parsingResults()
 {
+    $(games).empty();
     var dateNum;
     var priceNum = document.getElementById("gamePrice").value;
     document.getElementById("gamePrice").value ="#gamePrice";
@@ -102,7 +103,9 @@ function parsingResults()
             var gameLink = document.createElement(`a`)
             gameLink = "https://store.steampowered.com/app/" + gamesListArray[i].steamAppID
             gameLink.href = "https://store.steampowered.com/app/" + gamesListArray[i].steamAppID
-            var gameDate = "Release Date in UNIX: " + ` ` + gamesListArray[i].releaseDate
+            var gameDate = moment.unix(gamesListArray[i].releaseDate).format("MMM Do, YYYY");
+            // var gameDate = "Release Date in UNIX: " + ` ` + gamesListArray[i].moment.unix(test.releaseDate).format("MMM Do, YYYY");
+
  
             
  
@@ -118,6 +121,9 @@ function parsingResults()
 
             var games = document.querySelector(`#games`)
             games.appendChild(card)
+
+            
+
         }
 
 
