@@ -85,21 +85,35 @@ function parsingResults()
                 gamesListArray.push(data[i])
            }
            
+           var gameInfo = document.createElement(`div`)
+           var gameIcon = document.createElement(`img`)
+           gameIcon.src = data[i].thumb
+           var gameTitle = data[i].title
+           var gamePrice = data[i].salePrice
+           var storeID = data[i].storeID
+           var gameLink = "https://store.steampowered.com/app/" + data[i].steamAppID
+           var gameDate = "Release Date in UNIX: " + ` ` + data[i].releaseDate
+
+
+
+           gameInfo.innerHTML = gameTitle + ` ` + gamePrice + ` ` + storeID + ` ` + data[i].thumb + ` ` + gameLink + ` ` + gameDate
+           gameInfo.setAttribute(`class`, `white-text`)
+
+
+
+           var card = document.createElement(`div`)
+           card.setAttribute(`class`,`card-panel teal col s12 m4`)
+           card.appendChild(gameInfo)
+   
+           var games = document.querySelector(`#games`)
+           games.appendChild(card)
+
         }
         
         console.log(gamesListArray);
         
-        var gameInfo = document.createElement(`p`)
-        gameInfo.innerHTML = data[i].title + ` ` + data[i].salePrice + ` ` + data[i].storeID + ` ` + data[i].thumb + ` ` + "https://store.steampowered.com/app/" + ` ` + data[i].steamAppID + "Release Date in UNIX: " + ` ` + data[i].releaseDate
-        gameInfo.setAttribute(`class`, `white-text`)
 
 
-        var card = document.createElement(`div`)
-        card.setAttribute(`class`,`card-panel teal col s12 m4`)
-        card.appendChild(gameInfo)
-
-        var games = document.querySelector(`#games`)
-        games.appendChild(card)
 
 
     });
