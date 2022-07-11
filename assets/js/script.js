@@ -87,7 +87,6 @@ function parsingResults()
            
            var gameInfo = document.createElement(`div`)
            var gameIcon = document.createElement(`img`)
-        //    gameIcon.src = data[i].thumb
            gameIcon.setAttribute(`src`, data[i].thumb)
            console.log(data[i].thumb)
            var gameTitle = data[i].title
