@@ -13,9 +13,6 @@ fetch (`https://www.cheapshark.com/api/1.0/deals?storeID=1&upperPrice=15
         gameInfo.innerHTML = data[i].title + ` ` + data[i].salePrice + ` ` + data[i].storeID + ` ` + data[i].thumb + ` ` + "https://store.steampowered.com/app/" + ` ` + data[i].steamAppID + "Release Date in UNIX: " + ` ` + data[i].releaseDate
         gameInfo.setAttribute(`class`, `white-text`)
 
-        // var gameIcon = document.createElement(`img`)
-        // gameIcon.setAttribute(`src`, `${data[i].thumb}`)
-        // gameIcon.appendChild(gameInfo)
 
         var card = document.createElement(`div`)
         card.setAttribute(`class`,`card-panel teal col s12 m4`)
