@@ -115,7 +115,7 @@ function parsingResults()
             card.setAttribute(`class`,`card-panel teal col s12 m4`)
             card.appendChild(gameInfo)
             card.prepend(gameIcon)
-            
+
             var games = document.querySelector(`#games`)
             games.appendChild(card)
         }
