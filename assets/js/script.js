@@ -60,7 +60,7 @@ function parsingResults()
     document.getElementById("gamePrice").value ="#gamePrice";
 
     //fetching results
-    fetch (`https://www.cheapshark.com/api/1.0/deals?storeID=1&upperPrice=15`)
+    fetch (`https://www.cheapshark.com/api/1.0/deals?storeID=1&upperPrice=15&pageSize=100`)
     .then (function (response) {
         return response.json();
     })
@@ -85,36 +85,40 @@ function parsingResults()
                 gamesListArray.push(data[i])
            }
            
-           var gameInfo = document.createElement(`div`)
-           var gameIcon = document.createElement(`img`)
-           gameIcon.setAttribute(`src`, data[i].thumb)
-           console.log(data[i].thumb)
-           var gameTitle = data[i].title
-           var gamePrice = data[i].salePrice
-           var storeID = data[i].storeID
-           var gameLink = "https://store.steampowered.com/app/" + data[i].steamAppID
-           var gameDate = "Release Date in UNIX: " + ` ` + data[i].releaseDate
 
-           
-
-           gameInfo.innerHTML = gameTitle + ` ` + gamePrice + ` ` + storeID + ` ` + data[i].thumb + ` ` + gameLink + ` ` + gameDate
-
-           gameInfo.setAttribute(`class`, `white-text`)
-           
-           
-           var card = document.createElement(`div`)
-           card.setAttribute(`class`,`card-panel teal col s12 m4`)
-           card.appendChild(gameInfo)
-           card.prepend(gameIcon)
-           
-           var games = document.querySelector(`#games`)
-           games.appendChild(card)
            
         }
         
         console.log(gamesListArray);
         
 
+        for (let i = 0; i < gamesListArray.length; i++) {
+            var gameInfo = document.createElement(`div`)
+            var gameIcon = document.createElement(`img`)
+            gameIcon.setAttribute(`src`, gamesListArray[i].thumb)
+            var gameTitle = gamesListArray[i].title
+            var gamePrice = `$` + gamesListArray[i].salePrice
+            var storeID = gamesListArray[i].storeID
+            var gameLink = document.createElement(`a`)
+            gameLink = "https://store.steampowered.com/app/" + gamesListArray[i].steamAppID
+            gameLink.href = "https://store.steampowered.com/app/" + gamesListArray[i].steamAppID
+            var gameDate = "Release Date in UNIX: " + ` ` + gamesListArray[i].releaseDate
+ 
+            
+ 
+            gameInfo.innerHTML = gameTitle + ` ` + gamePrice + ` ` + storeID + ` ` + gameDate
+ 
+            gameInfo.setAttribute(`class`, `white-text`)
+            
+            
+            var card = document.createElement(`div`)
+            card.setAttribute(`class`,`card-panel teal col s12 m4`)
+            card.appendChild(gameInfo)
+            card.prepend(gameIcon)
+
+            var games = document.querySelector(`#games`)
+            games.appendChild(card)
+        }
 
 
 
