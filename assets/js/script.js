@@ -107,28 +107,28 @@ function parsingResults()
         for (let i = 0; i < gamesListArray.length; i++) {
             var gameInfo = document.createElement(`div`)
             var gameIcon = document.createElement(`img`)
-            gameIcon.setAttribute(`src`, gamesListArray[i].thumb)
+            var gameBanner = document.createElement(`img`)
+            var gameLink = document.createElement(`a`)
             var gameTitle = `Title: ${gamesListArray[i].title} <br>`
             var gamePrice = `Price: $${gamesListArray[i].salePrice} <br>`
-            var gameDate = `Release Date: ${moment.unix(gamesListArray[i].releaseDate).format("MMM Do, YYYY")}; <br>`
-            var storeID = gamesListArray[i].storeID
-            var gameLink = document.createElement(`a`)
-            gameLink.innerHTML = "https://store.steampowered.com/app/" + gamesListArray[i].steamAppID
-            gameLink.href = "https://store.steampowered.com/app/" + gamesListArray[i].steamAppID
-            // var gameDate = "Release Date in UNIX: " + ` ` + gamesListArray[i].moment.unix(test.releaseDate).format("MMM Do, YYYY");
+            var gameDate = `Release Date: ${moment.unix(gamesListArray[i].releaseDate).format("MMM Do, YYYY")} <br>`
+            
 
- 
-            gameInfo.innerHTML = gameTitle + ` ` + gamePrice + ` ` + gameDate + ` ` +  storeID 
- 
+
+            gameIcon.setAttribute(`src`, gamesListArray[i].thumb)
+            gameBanner.setAttribute(`src`, 'https://www.cheapshark.com/img/stores/banners/0.png')
             gameInfo.setAttribute(`class`, `white-text`)
-            
-            
+            gameLink.href = "https://store.steampowered.com/app/" + gamesListArray[i].steamAppID
+            gameInfo.innerHTML = gameTitle + ` ` + gamePrice + ` ` + gameDate
+
+
+            gameLink.appendChild(gameBanner)
             var card = document.createElement(`div`)
             card.setAttribute(`class`,`card-panel teal col s12 m4`)
             card.appendChild(gameInfo)
             card.prepend(gameIcon)
+            // parsingStoreInfo(data[i].storeID, card);
             card.appendChild(gameLink)
-
             var games = document.querySelector(`#games`)
             games.appendChild(card)
 
@@ -164,6 +164,124 @@ function checkPrice(test, price)
 
     return answer;
 };
+
+// function parsingStoreInfo(x, card)
+// {
+//     var gameBanner = document.createElement(`img`)
+//     fetch (`https://www.cheapshark.com/api/1.0/stores`)
+//     .then (function (response) {
+//         return response.json();
+//     })
+//     .then (function (data) {
+//         console.log(data[1].images.banner)
+//         switch(x)
+//         {
+//             case 1:
+//                 gameBanner.setAttribute(`src`, 'https://www.cheapshark.com' + data[1].images.banner);
+//                 card.appendChild(gameBanner);
+//                 break;
+//             case 2:
+//                 gameBanner.setAttribute(`src`, 'https://www.cheapshark.com' + data[2].images.banner);
+//                 card.appendChild(gameBanner);
+//                 break;
+//             case 3:
+//                 gameBanner.setAttribute(`src`, 'https://www.cheapshark.com' + data[3].images.banner);
+//                 card.appendChild(gameBanner);
+//                 break;
+//             case 4:
+//                 gameBanner.setAttribute(`src`, 'https://www.cheapshark.com' + data[4].images.banner);
+//                 card.appendChild(gameBanner);
+//                 break;
+//             case 5:
+//                 gameBanner.setAttribute(`src`, 'https://www.cheapshark.com' + data[5].images.banner);
+//                 card.appendChild(gameBanner);
+//                 break;
+//             case 6:
+//                 gameBanner.setAttribute(`src`, 'https://www.cheapshark.com' + data[6].images.banner);
+//                 card.appendChild(gameBanner);
+//                 break;
+//             case 7:
+//                 gameBanner.setAttribute(`src`, 'https://www.cheapshark.com' + data[7].images.banner);
+//                 card.appendChild(gameBanner);
+//                 break;
+//             case 8:
+//                 gameBanner.setAttribute(`src`, 'https://www.cheapshark.com' + data[8].images.banner);
+//                 card.appendChild(gameBanner);
+//                 break;
+//             case 9:
+//                 gameBanner.setAttribute(`src`, 'https://www.cheapshark.com' + data[9].images.banner);
+//                 card.appendChild(gameBanner);
+//                 break;
+//             case 10:
+//                 gameBanner.setAttribute(`src`, 'https://www.cheapshark.com' + data[10].images.banner);
+//                 card.appendChild(gameBanner);
+//                 break;
+//             case 11:
+//                 gameBanner.setAttribute(`src`, 'https://www.cheapshark.com' + data[11].images.banner);
+//                 card.appendChild(gameBanner);
+//                 break;
+//             case 12:
+//                 gameBanner.setAttribute(`src`, 'https://www.cheapshark.com' + data[12].images.banner);
+//                 card.appendChild(gameBanner);
+//                 break;
+//             case 13:
+//                 gameBanner.setAttribute(`src`, 'https://www.cheapshark.com' + data[13].images.banner);
+//                 card.appendChild(gameBanner);
+//                 break;
+//             case 14:
+//                 gameBanner.setAttribute(`src`, 'https://www.cheapshark.com' + data[14].images.banner);
+//                 card.appendChild(gameBanner);
+//                 break;
+//             case 15:
+//                 gameBanner.setAttribute(`src`, 'https://www.cheapshark.com' + data[15].images.banner);
+//                 card.appendChild(gameBanner);
+//                 break;
+//             case 16:
+//                 gameBanner.setAttribute(`src`, 'https://www.cheapshark.com' + data[16].images.banner);
+//                 card.appendChild(gameBanner);
+//                 break;
+//             case 17:
+//                 gameBanner.setAttribute(`src`, 'https://www.cheapshark.com' + data[17].images.banner);
+//                 card.appendChild(gameBanner);
+//                 break;
+//             case 18:
+//                 gameBanner.setAttribute(`src`, 'https://www.cheapshark.com' + data[18].images.banner);
+//                 card.appendChild(gameBanner);
+//                 break;
+//             case 19:
+//                 gameBanner.setAttribute(`src`, 'https://www.cheapshark.com' + data[19].images.banner);
+//                 card.appendChild(gameBanner);
+//                 break;
+//             case 20:
+//                 gameBanner.setAttribute(`src`, 'https://www.cheapshark.com' + data[20].images.banner);
+//                 card.appendChild(gameBanner);
+//                 break;
+//             case 21:
+//                 gameBanner.setAttribute(`src`, 'https://www.cheapshark.com' + data[21].images.banner);
+//                 card.appendChild(gameBanner);
+//                 break;
+//             case 22:
+//                 gameBanner.setAttribute(`src`, 'https://www.cheapshark.com' + data[22].images.banner);
+//                 card.appendChild(gameBanner);
+//                 break;
+//             case 23:
+//                 gameBanner.setAttribute(`src`, 'https://www.cheapshark.com' + data[23].images.banner);
+//                 card.appendChild(gameBanner);
+//                 break;
+//             case 24:
+//                 gameBanner.setAttribute(`src`, 'https://www.cheapshark.com' + data[24].images.banner);
+//                 card.appendChild(gameBanner);
+//                 break;
+
+
+//         }
+
+//     })
+
+    
+
+    
+// }
 
 function checkDate(test, num)
 {
