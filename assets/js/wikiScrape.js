@@ -5,18 +5,29 @@ let contentUrl = 'https://en.wikipedia.org/w/api.php?format=json&action=query&pr
 let imageListUrl = 'https://en.wikipedia.org/w/api.php?action=query&prop=images&format=json&titles='
 let imageUrl = 'https://en.wikipedia.org/w/index.php?title=Special:Redirect/file/'
 let zero = 0;
-let title, qPages, pageId, imageAddr;
+let title, link, qPages, contentExtracted, pageId, imageAddrs, imageSrc, imageName;
 
 
 // * setup is called once when the program starts (from p5js)
 function setup() {
-    // * removes the default canvas that p5 renders
-    noCanvas(); 
-    let userInput = select('#userinput');
-    userInput.changed(goWiki);
-        
-    function goWiki() {
-        let term = userInput.value();
+    
+    noCanvas(); // removes the default canvas that p5 renders
+    let userInputs = select('#userinput'); // target: array of games
+    userInputs.changed(itemHandler); // listener: when the array updates from null to have items in array
+
+    function itemHandler() {
+        let inputLength = $('#userinput').children().length;
+        if (!inputLength) {
+            alert("Nothing was added to the #userinput")
+            return;
+        }
+        $('#usesrinput').children().each(
+            goWiki(this.value)
+        );
+    }
+    
+    function goWiki(game) {
+        let term = game;
         let url = baseUrl + term;
 
         /**
@@ -34,7 +45,7 @@ function setup() {
         title = title.replace(/\s+/g, '_'); // 1 or more space everywhere in a line with underscore
 
         /* dom start: create title and link */
-        let link = data[3][zero];
+        link = data[3][zero];
         let titleEl = document.createElement('p');
         titleEl.innerHTML = title;
         let linkEl = document.createElement('a');
@@ -59,7 +70,7 @@ function setup() {
         qPages = data.query.pages;
         pageId = Object.keys(data.query.pages)[0];
         console.log(pageId);
-        let contentExtracted = qPages[pageId]['extract'];
+        contentExtracted = qPages[pageId]['extract'];
         console.log({contentExtracted});
         createDiv(contentExtracted); // DOM: creates Div and append it to body
 
@@ -80,9 +91,9 @@ function setup() {
             imageTitles.push(images[i].title);
         }
         console.log(imageTitles);
-        imageAddr = gotNonSvg(imageTitles);
-        if(imageAddr) {
-            gotImage(imageAddr); 
+        imageAddrs = gotNonSvg(imageTitles);
+        if(imageAddrs) {
+            gotImage(imageAddrs); 
         } else {
             createDiv("no image found");
         }
@@ -90,7 +101,7 @@ function setup() {
     }
     
     function gotNonSvg(imageTitles) {
-        const regex = new RegExp('\.(png|jpg)$');
+        const regex = new RegExp('\.(png|jpg)$'); // only get png or jpg 
 
         let returnArr = imageTitles.map(
             iTitle => 
@@ -106,10 +117,41 @@ function setup() {
     }
     
     function gotImage(image) {
-        let url = imageUrl + image;
-        img = createImg(url, "image from wikipedia"); // DOM create image 
-        img.size(100, 100); // size can be changed 
+        imageName = image
+        imageSrc = imageUrl + image;
         
+        createDOM();
     }
 
+    function createDOM() {
+        let cardContainer = document.createElement('div');
+        let cardImageDiv = document.createElement('div');
+        let cardImage = document.createElement('img');
+        let cardImageSpan = document.createElement('span');
+        let cardContentDiv = document.createElement('div');
+        let cardParagraph = document.createElement('p');
+        let aLinkDiv = document.createElement('div');
+        let aLink = document.createElement('a');
+
+        // set class 
+        cardContainer.setAttribute('class','card');
+        cardImageDiv.setAttribute('class','card-image');
+        cardImageSpan.setAttribute('class','card-title');
+        cardContentDiv.setAttribute('class','card-content');
+        aLinkDiv.setAttribute('class','card-action');
+
+        // attach to anchor
+        $('#description').append(cardContainer);
+        cardContainer.append(cardImageDiv, cardContentDiv, aLinkDiv);
+        cardImageDiv.append(cardImage, cardImageSpan);
+        cardContentDiv.appendChild(cardParagraph);
+        aLinkDiv.appendChild(aLink);
+
+        // add content 
+        cardImage.setAttribute('src', imageSrc)
+        cardImageSpan.textContent = imageName
+        cardParagraph.textContent = contentExtracted;
+        aLink.setAttribute('href', link);
+
+    }
 }
