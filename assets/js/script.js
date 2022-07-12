@@ -117,6 +117,7 @@ function parsingResults()
             var gameLink = document.createElement(`a`)
             gameLink.innerHTML = "https://store.steampowered.com/app/" + gamesListArray[i].steamAppID
             gameLink.href = "https://store.steampowered.com/app/" + gamesListArray[i].steamAppID
+            gameLink.target= `_blank`
             // var gameDate = "Release Date in UNIX: " + ` ` + gamesListArray[i].moment.unix(test.releaseDate).format("MMM Do, YYYY");
 
  
