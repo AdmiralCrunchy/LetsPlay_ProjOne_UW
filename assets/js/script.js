@@ -59,7 +59,7 @@ function dateSelected(selection)
 function parsingResults()
 {
 
-    // clear the cards
+    // clear cards
     function empty() {
         $(games).empty();
     }
@@ -71,7 +71,7 @@ function parsingResults()
     var priceNum = document.getElementById("gamePrice").value;
     document.getElementById("gamePrice").value ="#gamePrice";
 
-    //fetching results
+    //fetch results
     fetch (`https://www.cheapshark.com/api/1.0/deals?storeID=1&upperPrice=15&pageSize=100`)
     .then (function (response) {
         return response.json();
@@ -103,12 +103,14 @@ function parsingResults()
         console.log(gamesListArray);
         
         
-        // dynamically generates cards
+        // dynamically generate cards
         for (let i = 0; i < gamesListArray.length; i++) {
             var gameInfo = document.createElement(`div`)
             var gameIcon = document.createElement(`img`)
             gameIcon.setAttribute(`src`, gamesListArray[i].thumb)
-            var gameTitle = `Title: ${gamesListArray[i].title} <br>`
+            var gameTitle = document.createElement(`h5`)
+            gameTitle.innerHTML = gamesListArray[i].title
+
             var gamePrice = `Price: $${gamesListArray[i].salePrice} <br>`
             var gameDate = `Release Date: ${moment.unix(gamesListArray[i].releaseDate).format("MMM Do, YYYY")}; <br>`
             var storeID = gamesListArray[i].storeID
@@ -118,20 +120,27 @@ function parsingResults()
             // var gameDate = "Release Date in UNIX: " + ` ` + gamesListArray[i].moment.unix(test.releaseDate).format("MMM Do, YYYY");
 
  
-            gameInfo.innerHTML = gameTitle + ` ` + gamePrice + ` ` + gameDate + ` ` +  storeID 
+            gameInfo.innerHTML = gamePrice + ` ` + gameDate + ` ` +  storeID 
  
             gameInfo.setAttribute(`class`, `white-text`)
             
             
             var card = document.createElement(`div`)
-            card.setAttribute(`class`,`card-panel teal col s12 m4`)
-            card.appendChild(gameInfo)
+            card.setAttribute(`class`,`card-panel  col s12 m12 l3`)
+            card.style.margin = `0.5rem`;
+            card.style.padding = `2rem`;
+            card.style.borderRadius = `0.5rem`;
+            card.style.boxShadow = `3px 4px`
+            card.style.background = `linear-gradient(90deg, rgba(6,0,102,1) 0%, rgba(9,9,121,1) 84%, rgba(1,76,226,1) 100%)`
+            
             card.prepend(gameIcon)
+            card.appendChild(gameTitle)
+            card.appendChild(gameInfo)
             card.appendChild(gameLink)
+            gameLink.setAttribute(`class`, `white-text`)
 
             var games = document.querySelector(`#games`)
             games.appendChild(card)
-
             
 
 
