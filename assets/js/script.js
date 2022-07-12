@@ -6,6 +6,9 @@ var dateChoice = 3000;
 
 filterButton.on('click', parsingResults);
 
+
+
+
 //Parsing through results
 
 function isChecked(checkID)
@@ -55,7 +58,15 @@ function dateSelected(selection)
 
 function parsingResults()
 {
-    $(games).empty();
+
+    // clear the cards
+    function empty() {
+        $(games).empty();
+    }
+    empty();
+    gamesListArray = []
+
+
     var dateNum;
     var priceNum = document.getElementById("gamePrice").value;
     document.getElementById("gamePrice").value ="#gamePrice";
@@ -87,29 +98,27 @@ function parsingResults()
            }
            
 
-           
         }
         
         console.log(gamesListArray);
         
-
+        
+        // dynamically generates cards
         for (let i = 0; i < gamesListArray.length; i++) {
             var gameInfo = document.createElement(`div`)
             var gameIcon = document.createElement(`img`)
             gameIcon.setAttribute(`src`, gamesListArray[i].thumb)
-            var gameTitle = gamesListArray[i].title
-            var gamePrice = `$` + gamesListArray[i].salePrice
+            var gameTitle = `Title: ${gamesListArray[i].title} <br>`
+            var gamePrice = `Price: $${gamesListArray[i].salePrice} <br>`
+            var gameDate = `Release Date: ${moment.unix(gamesListArray[i].releaseDate).format("MMM Do, YYYY")}; <br>`
             var storeID = gamesListArray[i].storeID
             var gameLink = document.createElement(`a`)
-            gameLink = "https://store.steampowered.com/app/" + gamesListArray[i].steamAppID
+            gameLink.innerHTML = "https://store.steampowered.com/app/" + gamesListArray[i].steamAppID
             gameLink.href = "https://store.steampowered.com/app/" + gamesListArray[i].steamAppID
-            var gameDate = moment.unix(gamesListArray[i].releaseDate).format("MMM Do, YYYY");
             // var gameDate = "Release Date in UNIX: " + ` ` + gamesListArray[i].moment.unix(test.releaseDate).format("MMM Do, YYYY");
 
  
-            
- 
-            gameInfo.innerHTML = gameTitle + ` ` + gamePrice + ` ` + storeID + ` ` + gameDate
+            gameInfo.innerHTML = gameTitle + ` ` + gamePrice + ` ` + gameDate + ` ` +  storeID 
  
             gameInfo.setAttribute(`class`, `white-text`)
             
@@ -118,11 +127,13 @@ function parsingResults()
             card.setAttribute(`class`,`card-panel teal col s12 m4`)
             card.appendChild(gameInfo)
             card.prepend(gameIcon)
+            card.appendChild(gameLink)
 
             var games = document.querySelector(`#games`)
             games.appendChild(card)
 
             
+
 
         }
 
