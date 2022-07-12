@@ -78,6 +78,7 @@ function parsingResults()
            price = checkPrice(data[i], priceNum);
            date = checkDate(data[i],dateNum)
            rate = checkRating(data[i])
+        //    store = checkingStore(date[i]);
            
            console.log ("Results are: ", price, date, rate);
            if (price && date && rate)
@@ -88,23 +89,49 @@ function parsingResults()
         }
         
         console.log(gamesListArray);
-        
-        var gameInfo = document.createElement(`p`)
-        gameInfo.innerHTML = data[i].title + ` ` + data[i].salePrice + ` ` + data[i].storeID + ` ` + data[i].thumb + ` ` + "https://store.steampowered.com/app/" + ` ` + data[i].steamAppID + "Release Date in UNIX: " + ` ` + data[i].releaseDate
+        for (let i = 0; i < gamesListArray.length; i++)
+        {
+            var gameInfo = document.createElement(`p`)
+        gameInfo.innerHTML = gamesListArray[i].title + ` ` + gamesListArray[i].salePrice + ` ` + getStoreInfo(gamesListArray[i].storeID) + ` ` + gamesListArray[i].thumb + ` ` + "https://store.steampowered.com/app/" + gamesListArray[i].steamAppID + "Release Date in UNIX: " + ` ` + gamesListArray[i].releaseDate;
         gameInfo.setAttribute(`class`, `white-text`)
-
-
         var card = document.createElement(`div`)
         card.setAttribute(`class`,`card-panel teal col s12 m4`)
         card.appendChild(gameInfo)
 
         var games = document.querySelector(`#games`)
         games.appendChild(card)
+        }
+        // const {
+        //     title,
+        //     salePrice,
+        //     storeID,
+        //     thumb,
+        //     steamAppID,
+        //     releaseDate
+        // } = data[i]
 
 
     });
 
 };
+
+function getStoreInfo(storeNUM)
+{
+    fetch (`https://www.cheapshark.com/api/1.0/stores`)
+    .then (function (response) {
+        return response.json();
+    })
+    .then (function (data) {
+
+        for (let i = 0; i < gamesListArray.length; i++)
+        {
+            console.log(data);
+        }
+
+    })
+
+}
+
 
 
 function checkPrice(test, price)
