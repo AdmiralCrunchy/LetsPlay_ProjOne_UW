@@ -5,69 +5,164 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Let's Play!</title>
     <link rel="stylesheet" href="./assets/css/reset.css">
     <link rel="stylesheet" href="./assets/css/style.css">
     <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/favicon/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap" rel="stylesheet">
-    <title>Let's Play!</title>
-    <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
-    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <script src="./node_modules/p5js/p5.js/p5.js"></script>
+
 </head>
 
 
 <body>
     <header>
-        <h1>Let's Play</h1>
+        <ul id="dropdown1" class="dropdown-content">
+            <li><a href="#!">one</a></li>
+            <li><a href="#!">two</a></li>
+            <li class="divider"></li>
+            <li><a href="#!">three</a></li>
+          </ul>
+          <nav>
+            <div class="nav-wrapper">
+              <a href="#!" class="brand-logo">Let's Play</a>
+            </div>
+          </nav>
     </header>
-    <!-- to test mdc is working -->
-    <button class="mdc-button foo-button">
-        <div class="mdc-button__ripple"></div>
-        <span class="mdc-button__label">Button</span>
-    </button>
     
-    <aside>
-        <div>
-            <form action="">
-                <input type="checkbox" id="" name="">
-                <label for="">type1</label><br>
-                <input type="checkbox" id="" name="">
-                <label for="">type2</label><br>
-                <input type="checkbox" id="" name="">
-                <label for="">type3</label><br>
+    <div class="row">
+      <aside class="col l3">
+          <div>
+            <h2>Option Filter</h2>
+            <h4>Price Ranges</h4>
+            <form action="#">
+              <p class="range-field">
+                <input type="range" id="gamePrice" step="0.01" min="0.00" max="60.00" />
+              </p>
             </form>
-        </div>
-        <div>
-            <h2>Price check</h2>
-        </div>
-    </aside>
+<!-- Drop Down Menu for Game Age -->
+           <!-- Dropdown Trigger -->
+           <a class='dropdown-trigger btn' href='#' data-target='dropdown2'>Release Decade</a>
 
-    <main>
-        <section>
-            <h2>List of games</h2>
-            <ul>
-                <li></li>
-                <li></li>
-                <li></li>
-            </ul>
-        </section>
-        <section id="description">
-            <h2>Description</h2>
-
-        </section>
-    </main>
-
+           <!-- Dropdown Structure -->
+           <ul id='dropdown2' class='dropdown-content'>
+             <li onclick="dateSelected(3000)"><a id="#yearAll">All</a></li>
+             <li onclick="dateSelected(2020)"><a id="#year2020">2020's</a></li>
+             <li onclick="dateSelected(2010)"><a id="#year2010">2010's</a></li>
+             <li onclick="dateSelected(2000)"><a id="#year2000">2000's</a></li>
+             <li onclick="dateSelected(1990)"><a id="#year1990">1990's</a></li>
+             <li onclick="dateSelected(1980)"><a id="#year1980">1980's</a></li>
+           </ul>
+           <h4> Game Ratings</h4>
+              <p>
+                  <label for="posOver">
+                    <input id="posOver" type="checkbox" name="checkRating" class="filled-in" onclick="isChecked('posOver')"/>
+                    <span> Overwhelmingly Positive.</span>
+                  </label>
+              </p>
+              <p>
+                  <label for="posVery">
+                    <input id="posVery" type="checkbox" name="checkRating" class="filled-in" onclick="isChecked('posVery')"/>
+                    <span> Very Positive.</span>
+                  </label>
+              </p>
+              <p>
+                  <label for="posMost">
+                    <input id="posMost" type="checkbox" name="checkRating" class="filled-in" onclick="isChecked('posMost')"/>
+                    <span> Mostly Positive.</span>
+                  </label>
+              </p>
+              <p>
+                  <label for="posJust">
+                    <input id="posJust" type="checkbox" name="checkRating" class="filled-in" onclick="isChecked('posJust')"/>
+                    <span> Positive.</span>
+                  </label>
+              </p>
+              <p>
+                  <label for="mixed">
+                    <input id="mixed" type="checkbox" name="checkRating" class="filled-in" onclick="isChecked('mixed')"/>
+                    <span> Mixed.</span>
+                  </label>
+              </p>
+              <p>
+                  <label for="negJust">
+                    <input id="negJust" type="checkbox" name="checkRating" class="filled-in" onclick="isChecked('negJust')"/>
+                    <span> Negative.</span>
+                  </label>
+              </p>
+              <p>
+                  <label for="negMost">
+                    <input id="negMost" type="checkbox" name="checkRating" class="filled-in" onclick="isChecked('negMost')"/>
+                    <span> Mostly Negative.</span>
+                  </label>
+              </p>
+              <p>
+                  <label for="negVery">
+                    <input id="negVery" type="checkbox" name="checkRating" class="filled-in" onclick="isChecked('negVery')"/>
+                    <span> Very Negative.</span>
+                  </label>
+              </p>
+              <p>
+                  <label for="negOver">
+                    <input id="negOver" type="checkbox" name="checkRating" class="filled-in" onclick="isChecked('negOver')"/>
+                    <span>Overwhelmingly Negative .</span>
+                  </label>
+              </p>
+            <button id="filterSubmit" class="btn waves-effect waves-light" type="submit" name="action" style="margin-left:50px">Submit
+              <i class="material-icons right">send</i>
+            </button>
+          </div>
+      </aside>
+  
+      <main class="col l9">
+          <section>
+              <h2>List of games</h2>
+              <div class="row" id="games">
+                  <!-- <div class="col s12 m4">
+                    <div class="card-panel teal">
+                      <span class="white-text">I am a very simple card. I am good at containing small bits of information.
+                      I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col s12 m4">
+                    <div class="card-panel teal">
+                      <span class="white-text">I am a very simple card. I am good at containing small bits of information.
+                      I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col s12 m4">
+                    <div class="card-panel teal">
+                      <span class="white-text">I am a very simple card. I am good at containing small bits of information.
+                      I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
+                      </span>
+                    </div>
+                  </div> -->
+              </div>
+          </section>
+      </main>
+    </div>
+<div>
+  <h2>Games History</h2>
+</div>
 </body>
 
 <footer>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"
-        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"
+    ></script>
     <script src="./assets/js/script.js"></script>
     <script src="./assets/js/wikiScrape.js"></script>
 </footer>
