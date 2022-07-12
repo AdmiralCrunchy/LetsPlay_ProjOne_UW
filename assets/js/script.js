@@ -144,7 +144,6 @@ function parsingResults()
             games.appendChild(card)
             
 
-
         }
 
 
