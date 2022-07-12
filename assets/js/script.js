@@ -127,13 +127,10 @@ function parsingResults()
             gameLink.href = "https://store.steampowered.com/app/" + gamesListArray[i].steamAppID
             gameLink.target= `_blank`
             // var gameDate = "Release Date in UNIX: " + ` ` + gamesListArray[i].moment.unix(test.releaseDate).format("MMM Do, YYYY");
-
- 
-            gameInfo.innerHTML = gamePrice + ` ` + gameDate + ` ` +  storeID 
  
             gameInfo.setAttribute(`class`, `white-text`)
             gameLink.href = "https://store.steampowered.com/app/" + gamesListArray[i].steamAppID
-            gameInfo.innerHTML = gameTitle + ` ` + gamePrice + ` ` + gameDate
+            gameInfo.innerHTML = gamePrice + ` ` + gameDate
 
 
 
