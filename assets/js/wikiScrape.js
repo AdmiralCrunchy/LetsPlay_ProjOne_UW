@@ -5,125 +5,147 @@ let contentUrl = 'https://en.wikipedia.org/w/api.php?format=json&action=query&pr
 let imageListUrl = 'https://en.wikipedia.org/w/api.php?action=query&prop=images&format=json&titles='
 let imageUrl = 'https://en.wikipedia.org/w/index.php?title=Special:Redirect/file/'
 let zero = 0;
-let title, link, qPages, contentExtracted, pageId, imageAddrs, imageSrc, imageName;
+let title, link, contentExtracted, pageId, imageAddrs, imageSrc, imageName;
+
+
+let dict = {}
 
 
 // * setup is called once when the program starts (from p5js)
 function setup() {
     
     noCanvas(); // removes the default canvas that p5 renders
-    let userInputs = select('#userinput'); // target: array of games
-    userInputs.changed(itemHandler); // listener: when the array updates from null to have items in array
+    let userInputs = select('#funky-button'); // target: array of games
+    // userInputs.changed(itemHandler); // listener: when the array updates from null to have items in array
+    $('#funky-button').click(function() {itemHandler()});
 
     function itemHandler() {
         let inputLength = $('#userinput').children().length;
         if (!inputLength) {
-            alert("Nothing was added to the #userinput")
+            console.log("Nothing was added to the #userinput")
             return;
         }
-        $('#usesrinput').children().each(
-            goWiki(this.value)
-        );
+        console.log('button changed'); // debug working
+        $('#userinput').children('li').each(function () {
+            let game_title = $(this)[0].innerText;
+            console.log({loop_1: game_title});
+            goWiki(game_title);
+        });
     }
     
     function goWiki(game) {
+        console.log({game}); // debug: working
         let term = game;
         let url = baseUrl + term;
 
         /**
-         * Loads a JSON file from a file or a URL, and returns an Object. 
+         * Loads a JSON file asynchronously  from a file or a URL, and returns an Object. 
          * @param url name of file or url to load into json
          * @param gotSearch callback function to be executed after json loads and passed into
-         * @param jsonp string is for enabling the jsonpOption (json padding) that bypass the server's cross-domain issues
+         * @param jsonp string is for enabling the jsonpOption (json padding that bypass the server's cross-domain issues)
          */
         loadJSON(url, gotSearch, 'jsonp');
     }
 
     function gotSearch(data) {
+        console.log({event: 'first touching got search'});
         title = data[1][zero];
         // replace space with ws using regex
-        title = title.replace(/\s+/g, '_'); // 1 or more space everywhere in a line with underscore
-
-        /* dom start: create title and link */
+        title = title.replace(/\s+/g, '_'); // remove space with underscore
+        
         link = data[3][zero];
-        let titleEl = document.createElement('p');
-        titleEl.innerHTML = title;
-        let linkEl = document.createElement('a');
-        linkEl.href = link;
-        linkEl.innerHTML = link;
-        console.log({
-            status: 'Querying: ' + title,
-            link,
-        });
-        document.body.append(titleEl, linkEl);
-        /* dom end */
-
+        dict[title] = {title};
         let url = contentUrl + title;
-        console.log({ url });
-        loadJSON(url, gotContent, 'jsonp')
+        $.extend(dict[title], {link});
+
+        // console.log('before gotContent');
+        loadJSON(url, gotContent, 'jsonp');
     }
 
     function gotContent(data) {
-        console.log(data);
+
 
         // since all pages on wikipedia have an unique page_id, I need to dynamically get using Object.keys to extract the id 
-        qPages = data.query.pages;
-        pageId = Object.keys(data.query.pages)[0];
-        console.log(pageId);
-        contentExtracted = qPages[pageId]['extract'];
-        console.log({contentExtracted});
-        createDiv(contentExtracted); // DOM: creates Div and append it to body
-
-        gotSearchImages()
+        let qPages = data.query.pages; // safe
+        pageId = Object.keys(data.query.pages)[0]; // safe
+        title = qPages[pageId].title; // safe
+        title = title.replace(/\s+/g, '_'); // safe
+        
+        contentExtracted = qPages[pageId]['extract'].trim(); // safe
+        // console.log({event : `before extending contentExtracted to dict[${title}]`, title, 'content extracted ': contentExtracted});
+        console.log({'gotContent before extend look inside dict' :dict[title], contentExtracted});
+        $.extend(dict[title], {contentExtracted});
+        console.log({'gotContent after extend look inside dict' :dict[title], contentExtracted});
+        gotSearchImages(title)
     }
 
-    function gotSearchImages() {
+    function gotSearchImages(title) { // title is safe ALL IS SAFE
+
         let url = imageListUrl + title;
-        loadJSON(url, gotPictures, 'jsonp')
+        console.log({'url to images' : url}); 
+        loadJSON(url, gotPictures, 'jsonp');
     }
 
     function gotPictures(data) {
-        qPages = data.query.pages;
+        let qPages = data.query.pages;
         pageId = Object.keys(data.query.pages)[0];
         let images = qPages[pageId].images;
+        title = qPages[pageId].title.replace(/\s+/g, '_');
+        console.log({'got picture titles': title});
         let imageTitles = [];
-        for(let i = 0; i < images.length; i++) {
-            imageTitles.push(images[i].title);
+        // get max of 10 images
+        if(images.length > 10) {
+            for(let i = 0; i < 10; i++) {
+                imageTitles.push(images[i].title);
+            }
+        } else {
+            for(let i = 0; i < images.length; i++) {
+                imageTitles.push(images[i].title);
+            }
         }
-        console.log(imageTitles);
+        console.log({imageTitles});
         imageAddrs = gotNonSvg(imageTitles);
         if(imageAddrs) {
-            gotImage(imageAddrs); 
+            gotImage(imageAddrs, title); 
         } else {
-            createDiv("no image found");
+            alert("no image found");
         }
 
     }
     
+    // this function returns the first png or jpg image found in argument images array
     function gotNonSvg(imageTitles) {
         const regex = new RegExp('\.(png|jpg)$'); // only get png or jpg 
 
         let returnArr = imageTitles.map(
-            iTitle => 
+            iTitle => // item title is safe
             (regex.test(iTitle)) ? iTitle : null
         );
         // console.log(returnArr);
         for(let i = 0; i < imageTitles.length; i++) {
-            console.log(returnArr[i]);
-            if(returnArr[i])
+            if(returnArr[i]){
+                console.log('inside gotNonSvg'+imageTitles[i]); // debug: working 
                 return imageTitles[i]
+            }
         }
+        console.log('bottom of gotNonSvg, no truthy found in returnArr'); // debug: working, never reached
         return(null);
     }
     
-    function gotImage(image) {
-        imageName = image
+    function gotImage(image, title) {
+        // console.log({'inside gotImage and title is ': title}); // debug: working
+        imageName = image;
         imageSrc = imageUrl + image;
-        
-        createDOM();
+        $.extend(dict[title], {imageSrc}, {imageName});
+        console.log({'inside gotImage and inspect dict[title]': dict[title]}); // debug: 
+
+        createDOM(title);
     }
 
-    function createDOM() {
+    function createDOM(title) {
+        console.log({'createDOM look inside dict' :dict[title]});
+        
+        // create Elements
         let cardContainer = document.createElement('div');
         let cardImageDiv = document.createElement('div');
         let cardImage = document.createElement('img');
@@ -141,17 +163,29 @@ function setup() {
         aLinkDiv.setAttribute('class','card-action');
 
         // attach to anchor
-        $('#description').append(cardContainer);
+        $('#userinput').append(cardContainer);
         cardContainer.append(cardImageDiv, cardContentDiv, aLinkDiv);
         cardImageDiv.append(cardImage, cardImageSpan);
         cardContentDiv.appendChild(cardParagraph);
         aLinkDiv.appendChild(aLink);
 
         // add content 
-        cardImage.setAttribute('src', imageSrc)
-        cardImageSpan.textContent = imageName
-        cardParagraph.textContent = contentExtracted;
-        aLink.setAttribute('href', link);
-
+        cardImage.setAttribute('src', dict[title].imageSrc); // {title : {imageSrc}}
+        cardImageSpan.textContent = dict[title].imageName; // {title : {imageName}}
+        cardParagraph.textContent = dict[title].contentExtracted; // {title : {contentExtracted}}
+        aLink.setAttribute('href', dict[title].link); // {title : {link}}
+        aLink.textContent = 'Wikipedia link'; // target="_blank"
+        aLink.setAttribute('target', '_blank');
     }
 }
+
+
+$('#funky-button').click(function() {
+    console.log('clicked') // debug working
+    let curr_val = $(this).text();
+    if(curr_val == "click"){
+        $('#funky-button').text("clack");
+    } else {
+        $('#funky-button').text("click");
+    }
+});
