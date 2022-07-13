@@ -17,27 +17,25 @@ function setup() {
     $('#hidden-activator').click(function() {itemHandler()});
 
     function itemHandler() {
-        let inputLength = $('#games-anchor').children().length;
+        let inputLength = $('#gamesAnchor').children().length;
 
         // attach carousel container
         // let carouselContainer = document.createElement('div');
         // carouselContainer.setAttribute('id', 'carousel-container');
         // carouselContainer.setAttribute('class','carousel carousel-slider center');
-        // $('#render-anchor').append(carouselContainer);
+
 
 
         if (!inputLength) {
-            alert("Nothing inside of Game Results!")
+            console.error({'scriptjs error':'no game found'})
             return;
         }
         console.log('button changed'); // debug working
-        $('#games-anchor').children('div').each(function () {
+        $('#gamesAnchor').children('div').each(function () {
             let game_title = $(this)[0].innerText;
-            console.log({loop_1: game_title});
             goWiki(game_title);
         });
-        // console.log('executing carousel');
-        // initCarousel();
+
     }
     
     function goWiki(game) {
@@ -55,8 +53,12 @@ function setup() {
     }
 
     function gotSearch(data) {
-        console.log({event: 'first touching got search'});
-        let title = data[1][0];
+        console.log({event: 'first touching got search', data});
+        if(!data) { // if data is null, continue onto next loop
+            console.log({'search query data empty': 'loop skipped'});
+            return;
+        }   
+        let title = data[0];
         // replace space with ws using regex
         title = title.replace(/\s+/g, '_'); // remove space with underscore
         
@@ -70,19 +72,22 @@ function setup() {
     }
 
     function gotContent(data) {
-
-
+        
         // since all pages on wikipedia have an unique page_id, I need to dynamically get using Object.keys to extract the id 
         let qPages = data.query.pages; // safe
         let pageId = Object.keys(data.query.pages)[0]; // safe
         let title = qPages[pageId].title; // safe
         title = title.replace(/\s+/g, '_'); // safe
+        if(qPages[pageId]['extract']) {
+            let contentExtracted = qPages[pageId]['extract'].trim(); // safe
+            $.extend(dict[title], {contentExtracted});
+        } else { // if nothing to extract, continue to next loop
+            console.log({'description data empty': 'loop skipped'});
+            return;
+        }
+        console.log({'inside gotcontent data': data});
         
-        let contentExtracted = qPages[pageId]['extract'].trim(); // safe
-        // console.log({event : `before extending contentExtracted to dict[${title}]`, title, 'content extracted ': contentExtracted});
-        console.log({'gotContent before extend look inside dict' :dict[title], contentExtracted});
-        $.extend(dict[title], {contentExtracted});
-        console.log({'gotContent after extend look inside dict' :dict[title], contentExtracted});
+        console.log({'gotContent after extend look inside dict' :dict[title]});
         gotSearchImages(title)
     }
 
@@ -101,6 +106,9 @@ function setup() {
         console.log({'got picture titles': title});
         let imageTitles = [];
         // get max of 10 images
+        if(!images) { // if no image, continue to next loop
+            return;
+        }
         if(images.length > 10) {
             for(let i = 0; i < 10; i++) {
                 imageTitles.push(images[i].title);
@@ -115,7 +123,8 @@ function setup() {
         if(imageAddrs) {
             gotImage(imageAddrs, title); 
         } else {
-            console.log("no image found");
+            console.log({'no image found': 'loop skipped'});
+            return;
         }
 
     }
@@ -153,7 +162,7 @@ function setup() {
 
         console.log({'createDOM look inside dict' :dict[title], title});
         if(!dict[title]) { //if nothing inside, don't create the card
-            console.log({'dev error': `${title} has no entry on Wikipedia.`});
+            console.log({ 'no entry on Wikipedia': `title:${dict[title]} loop skipped`});
             return;
         }
         
@@ -182,13 +191,18 @@ function setup() {
         // attach to anchor
         // $('#carousel-container').append(carouselItem);
         // carouselItem.append(cardContainer);
-        $('#render-anchor').append(flexContainer);
+        $('#renderAnchor').append(flexContainer);
         flexContainer.append(cardContainer);
         cardContainer.append(cardImageDiv, cardContentDiv, aLinkDiv);
         cardImageDiv.append(cardImage, cardImageSpan);
         cardContentDiv.appendChild(cardParagraph);
         aLinkDiv.appendChild(aLink);
 
+        // console.log({
+        //     title, 
+        //     'inside of': 'create DOM',
+        //     'title inside dict':dict[title]
+        // });
         // add content 
         cardImage.setAttribute('src', dict[title].imageSrc); // {title : {imageSrc}}
         cardImageSpan.textContent = dict[title].imageName.substring(5); // {title : {imageName}}
