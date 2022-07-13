@@ -27,7 +27,6 @@ function setup() {
 
 
         if (!inputLength) {
-            alert("Nothing inside of Game Results!")
             return;
         }
         console.log('button changed'); // debug working
