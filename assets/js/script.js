@@ -164,13 +164,17 @@ function parsingResults()
             var gameIcon = document.createElement(`img`)
             var gameBanner = document.createElement(`img`)
             var gameLink = document.createElement(`a`)
+            var gameRevIcon = document.createElement(`img`)
+            var gameReview = document.createElement(`a`)
+            var normalPrice = `Non-Sale Price: $${gamesListArray[i].normalPrice}<br>`
             var gameTitle = `Title: ${gamesListArray[i].title} <br>`
             var gamePrice = `Price: $${gamesListArray[i].salePrice} <br>`
             var gameRank = `Rating:  ${gamesListArray[i].steamRatingText} <br>` //setGameRank();
             var gameDate = `Release Date: ${moment.unix(gamesListArray[i].releaseDate).format("MMM Do, YYYY")} <br>`
             
-
-            gameRank.setAttribute
+            gameRevIcon.setAttribute(`src`, 'https://app.truework.com/api/company/20203/logo?fallback=1');
+            gameReview.href = 'https://www.metacritic.com' + gamesListArray[i].metacriticLink
+            gameReview.target= '_blank'
             gameIcon.setAttribute(`src`, gamesListArray[i].thumb)
             gameBanner.setAttribute(`src`, 'https://www.cheapshark.com/img/stores/banners/0.png')
             gameIcon.setAttribute(`src`, gamesListArray[i].thumb)
@@ -181,7 +185,7 @@ function parsingResults()
  
             gameInfo.setAttribute(`class`, `white-text`)
             gameLink.href = "https://store.steampowered.com/app/" + gamesListArray[i].steamAppID
-            gameInfo.innerHTML = gamePrice + ` ` + gameRank + ` `+ gameDate
+            gameInfo.innerHTML = normalPrice + ` `  + gamePrice + ` ` + gameRank + ` `+ gameDate
 
 
 
@@ -193,11 +197,14 @@ function parsingResults()
             card.style.boxShadow = `3px 4px`
             card.style.background = `linear-gradient(90deg, rgba(6,0,102,1) 0%, rgba(9,9,121,1) 84%, rgba(1,76,226,1) 100%)`
             
+
             card.prepend(gameIcon)
             gameLink.appendChild(gameBanner)
             card.appendChild(gameTitle)
             card.appendChild(gameInfo)
             card.appendChild(gameLink)
+            gameReview.appendChild(gameRevIcon)
+            card.appendChild(gameReview)
             gameLink.setAttribute(`class`, `white-text`)
 
             var games = document.querySelector(`#games`)
