@@ -4,11 +4,8 @@ let baseUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&format=json&
 let contentUrl = 'https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles='
 let imageListUrl = 'https://en.wikipedia.org/w/api.php?action=query&prop=images&format=json&titles='
 let imageUrl = 'https://en.wikipedia.org/w/index.php?title=Special:Redirect/file/'
-let zero = 0;
-let title, link, contentExtracted, pageId, imageAddrs, imageSrc, imageName;
 
-
-let dict = {}
+let dict = {} // object that holds everything 
 
 
 // * setup is called once when the program starts (from p5js)
@@ -20,17 +17,27 @@ function setup() {
     $('#funky-button').click(function() {itemHandler()});
 
     function itemHandler() {
-        let inputLength = $('#userinput').children().length;
+        let inputLength = $('#wiki-anchor').children().length;
+
+        // attach carousel container
+        // let carouselContainer = document.createElement('div');
+        // carouselContainer.setAttribute('id', 'carousel-container');
+        // carouselContainer.setAttribute('class','carousel carousel-slider center');
+        // $('#render-anchor').append(carouselContainer);
+
+
         if (!inputLength) {
-            console.log("Nothing was added to the #userinput")
+            alert("Nothing was added to the #userinput")
             return;
         }
         console.log('button changed'); // debug working
-        $('#userinput').children('li').each(function () {
+        $('#wiki-anchor').children('div').each(function () {
             let game_title = $(this)[0].innerText;
             console.log({loop_1: game_title});
             goWiki(game_title);
         });
+        // console.log('executing carousel');
+        // initCarousel();
     }
     
     function goWiki(game) {
@@ -49,11 +56,11 @@ function setup() {
 
     function gotSearch(data) {
         console.log({event: 'first touching got search'});
-        title = data[1][zero];
+        let title = data[1][0];
         // replace space with ws using regex
         title = title.replace(/\s+/g, '_'); // remove space with underscore
         
-        link = data[3][zero];
+        let link = data[3][0];
         dict[title] = {title};
         let url = contentUrl + title;
         $.extend(dict[title], {link});
@@ -67,11 +74,11 @@ function setup() {
 
         // since all pages on wikipedia have an unique page_id, I need to dynamically get using Object.keys to extract the id 
         let qPages = data.query.pages; // safe
-        pageId = Object.keys(data.query.pages)[0]; // safe
-        title = qPages[pageId].title; // safe
+        let pageId = Object.keys(data.query.pages)[0]; // safe
+        let title = qPages[pageId].title; // safe
         title = title.replace(/\s+/g, '_'); // safe
         
-        contentExtracted = qPages[pageId]['extract'].trim(); // safe
+        let contentExtracted = qPages[pageId]['extract'].trim(); // safe
         // console.log({event : `before extending contentExtracted to dict[${title}]`, title, 'content extracted ': contentExtracted});
         console.log({'gotContent before extend look inside dict' :dict[title], contentExtracted});
         $.extend(dict[title], {contentExtracted});
@@ -88,9 +95,9 @@ function setup() {
 
     function gotPictures(data) {
         let qPages = data.query.pages;
-        pageId = Object.keys(data.query.pages)[0];
+        let pageId = Object.keys(data.query.pages)[0];
         let images = qPages[pageId].images;
-        title = qPages[pageId].title.replace(/\s+/g, '_');
+        let title = qPages[pageId].title.replace(/\s+/g, '_');
         console.log({'got picture titles': title});
         let imageTitles = [];
         // get max of 10 images
@@ -104,7 +111,7 @@ function setup() {
             }
         }
         console.log({imageTitles});
-        imageAddrs = gotNonSvg(imageTitles);
+        let imageAddrs = gotNonSvg(imageTitles);
         if(imageAddrs) {
             gotImage(imageAddrs, title); 
         } else {
@@ -134,8 +141,8 @@ function setup() {
     
     function gotImage(image, title) {
         // console.log({'inside gotImage and title is ': title}); // debug: working
-        imageName = image;
-        imageSrc = imageUrl + image;
+        let imageName = image;
+        let imageSrc = imageUrl + image;
         $.extend(dict[title], {imageSrc}, {imageName});
         console.log({'inside gotImage and inspect dict[title]': dict[title]}); // debug: 
 
@@ -143,9 +150,13 @@ function setup() {
     }
 
     function createDOM(title) {
-        console.log({'createDOM look inside dict' :dict[title]});
+        let curr_children_Count = $('#carousel-container > div').length;
+        console.log({'createDOM look inside dict' :dict[title],
+        'current children count': curr_children_Count });
         
         // create Elements
+        // let carouselItem = document.createElement('div');
+        let flexContainer = document.createElement('div')
         let cardContainer = document.createElement('div');
         let cardImageDiv = document.createElement('div');
         let cardImage = document.createElement('img');
@@ -156,14 +167,20 @@ function setup() {
         let aLink = document.createElement('a');
 
         // set class 
-        cardContainer.setAttribute('class','card');
+        // carouselItem.setAttribute('class','carousel-item blue black-text')
+        // carouselItem.setAttribute('href', getHref(curr_children_Count));
+        // flexContainer.setAttribute('class','col s12 m7');
+        cardContainer.setAttribute('class','card medium');
         cardImageDiv.setAttribute('class','card-image');
         cardImageSpan.setAttribute('class','card-title');
         cardContentDiv.setAttribute('class','card-content');
         aLinkDiv.setAttribute('class','card-action');
 
         // attach to anchor
-        $('#userinput').append(cardContainer);
+        // $('#carousel-container').append(carouselItem);
+        // carouselItem.append(cardContainer);
+        $('#render-anchor').append(flexContainer);
+        flexContainer.append(cardContainer);
         cardContainer.append(cardImageDiv, cardContentDiv, aLinkDiv);
         cardImageDiv.append(cardImage, cardImageSpan);
         cardContentDiv.appendChild(cardParagraph);
@@ -171,11 +188,33 @@ function setup() {
 
         // add content 
         cardImage.setAttribute('src', dict[title].imageSrc); // {title : {imageSrc}}
-        cardImageSpan.textContent = dict[title].imageName; // {title : {imageName}}
+        cardImageSpan.textContent = dict[title].imageName.substring(5); // {title : {imageName}}
         cardParagraph.textContent = dict[title].contentExtracted; // {title : {contentExtracted}}
         aLink.setAttribute('href', dict[title].link); // {title : {link}}
         aLink.textContent = 'Wikipedia link'; // target="_blank"
         aLink.setAttribute('target', '_blank');
+    }
+
+    function getHref(curr_children_Count) {
+        // need to fix
+
+        let result = curr_children_Count + 1;
+        console.log({'result in getHref': result, curr_children_Count});
+        if(result == 1) {
+            return("#one!");
+        } else if(result == 2) {
+            return("#two!");
+        } else if(result == 3) {
+            return("#three!");
+        } else if(result == 4) {
+            return("#four!");
+        } else if(result == 5) {
+            return("#five!");
+        } else 
+            return;
+        return;
+
+        
     }
 }
 
@@ -189,3 +228,14 @@ $('#funky-button').click(function() {
         $('#funky-button').text("click");
     }
 });
+
+
+
+// function initCarousel() {
+//     $('.carousel.carousel-slider').carousel(
+//         {
+//             fullWidth: true,
+//             indicators: true
+//         }
+//     ); 
+// }
