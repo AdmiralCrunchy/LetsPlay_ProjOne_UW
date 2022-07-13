@@ -13,18 +13,10 @@ function setup() {
     
     noCanvas(); // removes the default canvas that p5 renders
     let userInputs = select('#funky-button'); // target: array of games
-    // userInputs.changed(itemHandler); // listener: when the array updates from null to have items in array
     $('#hidden-activator').click(function() {itemHandler()});
 
     function itemHandler() {
         let inputLength = $('#gamesAnchor').children().length;
-
-        // attach carousel container
-        // let carouselContainer = document.createElement('div');
-        // carouselContainer.setAttribute('id', 'carousel-container');
-        // carouselContainer.setAttribute('class','carousel carousel-slider center');
-
-
 
         if (!inputLength) {
             console.error({'scriptjs error':'no game found'})
@@ -72,15 +64,15 @@ function setup() {
     }
 
     function gotContent(data) {
-        
+
         // since all pages on wikipedia have an unique page_id, I need to dynamically get using Object.keys to extract the id 
         let qPages = data.query.pages; // safe
         let pageId = Object.keys(data.query.pages)[0]; // safe
         let title = qPages[pageId].title; // safe
         title = title.replace(/\s+/g, '_'); // safe
         if(qPages[pageId]['extract']) {
-            let contentExtracted = qPages[pageId]['extract'].trim(); // safe
-            $.extend(dict[title], {contentExtracted});
+        let contentExtracted = qPages[pageId]['extract'].trim(); // safe
+        $.extend(dict[title], {contentExtracted});
         } else { // if nothing to extract, continue to next loop
             console.log({'description data empty': 'loop skipped'});
             return;
@@ -160,6 +152,7 @@ function setup() {
 
     function createDOM(title) {
 
+        
         console.log({'createDOM look inside dict' :dict[title], title});
         if(!dict[title]) { //if nothing inside, don't create the card
             console.log({ 'no entry on Wikipedia': `title:${dict[title]} loop skipped`});
@@ -167,7 +160,6 @@ function setup() {
         }
         
         // create Elements
-        // let carouselItem = document.createElement('div');
         let flexContainer = document.createElement('div')
         let cardContainer = document.createElement('div');
         let cardImageDiv = document.createElement('div');
@@ -179,9 +171,6 @@ function setup() {
         let aLink = document.createElement('a');
 
         // set class 
-        // carouselItem.setAttribute('class','carousel-item blue black-text')
-        // carouselItem.setAttribute('href', getHref(curr_children_Count));
-        // flexContainer.setAttribute('class','col s12 m7');
         cardContainer.setAttribute('class','card medium');
         cardImageDiv.setAttribute('class','card-image');
         cardImageSpan.setAttribute('class','card-title');
@@ -189,20 +178,13 @@ function setup() {
         aLinkDiv.setAttribute('class','card-action');
 
         // attach to anchor
-        // $('#carousel-container').append(carouselItem);
-        // carouselItem.append(cardContainer);
-        $('#renderAnchor').append(flexContainer);
-        flexContainer.append(cardContainer);
+        $('#renderAnchor').append(cardContainer);
         cardContainer.append(cardImageDiv, cardContentDiv, aLinkDiv);
         cardImageDiv.append(cardImage, cardImageSpan);
         cardContentDiv.appendChild(cardParagraph);
         aLinkDiv.appendChild(aLink);
 
-        // console.log({
-        //     title, 
-        //     'inside of': 'create DOM',
-        //     'title inside dict':dict[title]
-        // });
+
         // add content 
         cardImage.setAttribute('src', dict[title].imageSrc); // {title : {imageSrc}}
         cardImageSpan.textContent = dict[title].imageName.substring(5); // {title : {imageName}}
