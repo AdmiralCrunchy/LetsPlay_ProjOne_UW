@@ -150,6 +150,7 @@ function setup() {
 
     function createDOM(title) {
 
+        
         console.log({'createDOM look inside dict' :dict[title], title});
         if(!dict[title]) { //if nothing inside, don't create the card
             console.log({'dev error': `${title} has no entry on Wikipedia.`});
@@ -185,7 +186,7 @@ function setup() {
         $('#render-anchor').append(flexContainer);
         flexContainer.append(cardContainer);
         cardContainer.append(cardImageDiv, cardContentDiv, aLinkDiv);
-        cardImageDiv.append(cardImage, cardImageSpan);
+        cardImageDiv.append(cardImage);
         cardContentDiv.appendChild(cardParagraph);
         aLinkDiv.appendChild(aLink);
 

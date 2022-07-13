@@ -434,6 +434,9 @@ function checkRating(rating)
         {
             console.log("This product is Overwhelmingly Positive");
             return true;
+        }
+        else{
+            wrongRank++;
         } 
     }
     if(veryPos)
@@ -443,6 +446,9 @@ function checkRating(rating)
         {
             console.log("This product is Very Positive");
             return true;
+        }
+        else{
+            wrongRank++;
         } 
     }
     if(mostPos)
@@ -452,6 +458,9 @@ function checkRating(rating)
         {
             console.log("This product is Mostly Positive");
             return true;
+        }
+        else{
+            wrongRank++;
         } 
     }
     if(justPos)
@@ -461,6 +470,9 @@ function checkRating(rating)
         {
             console.log("This product is Just Positive");
             return true;
+        }
+        else{
+            wrongRank++;
         } 
     }
     if(mixed)
@@ -470,6 +482,9 @@ function checkRating(rating)
         {
             console.log("This product is Mixed");
             return true;
+        }
+        else{
+            wrongRank++;
         } 
     }
     if(justNeg)
@@ -479,6 +494,9 @@ function checkRating(rating)
         {
             console.log("This product is Just Negative");
             return true;
+        }
+        else{
+            wrongRank++;
         } 
     }
     
@@ -489,6 +507,9 @@ function checkRating(rating)
         {
             console.log("This product is Mostly Negative");
             return true;
+        }
+        else{
+            wrongRank++;
         } 
     }
     if(veryNeg)
@@ -498,6 +519,9 @@ function checkRating(rating)
         {
             console.log("This product is Very Negative");
             return true;
+        }
+        else{
+            wrongRank++;
         } 
     }
     if(overNeg)
@@ -508,6 +532,9 @@ function checkRating(rating)
             console.log("This product is Overwhelmly Negative");
             return true;
         } 
+        else{
+            wrongRank++;
+        }
     }
     else
     {
