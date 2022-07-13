@@ -178,6 +178,7 @@ function setup() {
         cardImageSpan.setAttribute('class','card-title');
         cardContentDiv.setAttribute('class','card-content');
         aLinkDiv.setAttribute('class','card-action');
+        flexContainer.setAttribute(`class`,`col s12 m6 l4`)
 
         // attach to anchor
         // $('#carousel-container').append(carouselItem);
