@@ -2,6 +2,17 @@ div {
     word-break: break-all;
 }
 
+.default-hidden {
+    display: none;
+}
+
+.card-content {
+    overflow-y: scroll !important;
+    padding-bottom: 48px !important;
+    word-break: break-word;
+    background-color: #0646a6;
+}
+
 body {
     background-color: #04275c;
 }

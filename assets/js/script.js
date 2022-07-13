@@ -62,9 +62,10 @@ function parsingResults()
     // clear cards
     function empty() {
         $(games).empty();
+        $('#games-anchor').empty();
     }
     empty();
-    gamesListArray = []
+    gamesListArray = [];
 
 
     var dateNum;
@@ -152,12 +153,25 @@ function parsingResults()
             var games = document.querySelector(`#games`)
             games.appendChild(card)
             
+<<<<<<< HEAD
 
 
+=======
+            // populating wikipedia virtual game list
+            let hiddenGameChild = document.createElement('div');
+            hiddenGameChild.setAttribute('class','default-hidden');
+            hiddenGameChild.textContent = gamesListArray[i].title;
+            $('#games-anchor').append(hiddenGameChild);
+>>>>>>> dev
         }
-
-
-
+        
+        // once cards loads, fire the wikipedia trigger
+        console.log({event: 'done rendering'});
+        function buttonclick(){
+            var selfReady= document.getElementById("hidden-activator");
+            selfReady.click();
+        }
+        buttonclick();
     });
 
 };
@@ -472,3 +486,4 @@ $('.dropdown-trigger').dropdown();
 
 //Pulling information
         // console.log(data[i].title, data[i].salePrice, data[i].steamRatingText, data[i].storeID, data[i].thumb, "https://store.steampowered.com/app/"+data[i].steamAppID, "https://metacritic.com/"+data[i].metacriticLink, "Release Date in UNIX: ", data[i].releaseDate)
+
