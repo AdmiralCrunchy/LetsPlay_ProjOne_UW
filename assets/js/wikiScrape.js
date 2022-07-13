@@ -201,13 +201,5 @@ function setup() {
 }
 
 
-$('#funky-button').click(function() {
-    let curr_val = $(this).text();
-    if(curr_val == "click"){
-        $('#funky-button').text("clack");
-    } else {
-        $('#funky-button').text("click");
-    }
-});
 
 
