@@ -176,11 +176,12 @@ function setup() {
         cardImageSpan.setAttribute('class','card-title');
         cardContentDiv.setAttribute('class','card-content');
         aLinkDiv.setAttribute('class','card-action');
+        flexContainer.setAttribute(`class`,`col s12 m6 l4`)
 
         // attach to anchor
         $('#renderAnchor').append(cardContainer);
         cardContainer.append(cardImageDiv, cardContentDiv, aLinkDiv);
-        cardImageDiv.append(cardImage, cardImageSpan);
+        cardImageDiv.append(cardImage);
         cardContentDiv.appendChild(cardParagraph);
         aLinkDiv.appendChild(aLink);
 

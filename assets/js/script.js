@@ -2,6 +2,12 @@ var filterButton = $('#filterSubmit');
 var gamesListArray = [];
 var dropChoice;
 var dateChoice = 3000;
+var gameWrongPrice = false;
+var gameWrongDate = false;
+var gameWrongRanking = false;
+var wrongPrice = 0;
+var wrongDate = 0;
+var wrongRank = 0;
 
 
 filterButton.on('click', parsingResults);
@@ -58,7 +64,7 @@ function dateSelected(selection)
 
 function parsingResults()
 {
-
+    console.log("Date Selected ", dateChoice)
     // clear cards
     function empty() {
         $(games).empty();
@@ -93,7 +99,7 @@ function parsingResults()
            date = checkDate(data[i],dateNum)
            rate = checkRating(data[i])
            
-           console.log ("Results are: ", price, date, rate);
+           console.log ("Results are: ", "Price: ", price,"Date: ", date,"Rating: ", rate);
            if (price && date && rate)
            {
                 gamesListArray.push(data[i])
@@ -104,6 +110,54 @@ function parsingResults()
         
         console.log(gamesListArray);
         
+        if(gamesListArray.length == 0)
+        {
+            console.log("We made it!")
+            var card = document.createElement(`div`)
+            card.setAttribute(`class`,`card-panel  col s12 m12 l12`)
+            card.style.margin = `0.5rem`;
+            card.style.padding = `2rem`;
+            card.style.borderRadius = `0.5rem`;
+            card.style.boxShadow = `3px 4px`
+            card.style.background = `linear-gradient(90deg, rgba(6,0,102,1) 0%, rgba(9,9,121,1) 84%, rgba(1,76,226,1) 100%)`
+
+            var noGamesInfo =document.createElement('h1')
+            if(wrongPrice == 60)
+            {
+                console.log("wrong Price")
+                var priceBad = document.createElement('h5')
+                priceBad.innerHTML = "No Prices That Low!"
+                card.appendChild(priceBad)
+
+            }
+            if(wrongDate == 60)
+            {
+                console.log("Wrong Date")
+                var dateBad = document.createElement('h5')
+                dateBad.innerHTML = "That Decade Is Empty!"
+                card.appendChild(dateBad)
+            }
+            if(wrongRank == 60)
+            {
+                console.log("Wrong Rank")
+                var rankBad = document.createElement('h5')
+                rankBad.innerHTML = "No Matching Ranks!"
+                card.appendChild(rankBad)
+            }
+            noGamesInfo.innerHTML= "NO RESULTS"
+            card.prepend(noGamesInfo)
+            
+            var games = document.querySelector(`#games`)
+            games.appendChild(card)
+
+            gameWrongPrice = false;
+            gameWrongDate = false;
+            gameWrongRanking = false;
+            wrongPrice = 0;
+            wrongDate = 0;
+            wrongRank = 0;
+
+        }
         
         // dynamically generate cards
         for (let i = 0; i < gamesListArray.length; i++) {
@@ -113,26 +167,22 @@ function parsingResults()
             var gameLink = document.createElement(`a`)
             var gameTitle = `Title: ${gamesListArray[i].title} <br>`
             var gamePrice = `Price: $${gamesListArray[i].salePrice} <br>`
+            var gameRank = `Rating:  ${gamesListArray[i].steamRatingText} <br>` //setGameRank();
             var gameDate = `Release Date: ${moment.unix(gamesListArray[i].releaseDate).format("MMM Do, YYYY")} <br>`
             
 
-
+            gameRank.setAttribute
             gameIcon.setAttribute(`src`, gamesListArray[i].thumb)
             gameBanner.setAttribute(`src`, 'https://www.cheapshark.com/img/stores/banners/0.png')
             gameIcon.setAttribute(`src`, gamesListArray[i].thumb)
             var gameTitle = document.createElement(`h5`)
             gameTitle.innerHTML = gamesListArray[i].title
-
-            var gamePrice = `Price: $${gamesListArray[i].salePrice} <br>`
-            var gameDate = `Release Date: ${moment.unix(gamesListArray[i].releaseDate).format("MMM Do, YYYY")}; <br>`
-            var gameLink = document.createElement(`a`)
             gameLink.href = "https://store.steampowered.com/app/" + gamesListArray[i].steamAppID
             gameLink.target= `_blank`
-            // var gameDate = "Release Date in UNIX: " + ` ` + gamesListArray[i].moment.unix(test.releaseDate).format("MMM Do, YYYY");
  
             gameInfo.setAttribute(`class`, `white-text`)
             gameLink.href = "https://store.steampowered.com/app/" + gamesListArray[i].steamAppID
-            gameInfo.innerHTML = gamePrice + ` ` + gameDate
+            gameInfo.innerHTML = gamePrice + ` ` + gameRank + ` `+ gameDate
 
 
 
@@ -188,6 +238,7 @@ function checkPrice(test, price)
         console.log(test.title);
         console.log(test.salePrice);
         console.log('Not Correct');
+        wrongPrice++
     }
 
 
@@ -319,7 +370,7 @@ function checkDate(test, num)
     if (test.releaseDate <= 1893484799 && test.releaseDate >= 1577865600)
     {
         console.log("This is a 2020's game!");
-        if (dateChoice == 3000 || 2020)
+        if (dateChoice == 3000 || dateChoice == 2020)
         { 
             return true;
         }
@@ -327,7 +378,7 @@ function checkDate(test, num)
     else if(test.releaseDate <= 1577865599 && test.releaseDate >= 1262332800)
     {
         console.log("This is a 2010's game!");
-        if (dateChoice == 3000 || 2010)
+        if (dateChoice == 3000 ||  dateChoice == 2010)
         { 
             return true;
         }
@@ -335,7 +386,7 @@ function checkDate(test, num)
     else if (test.releaseDate <= 1262332799 && test.releaseDate >= 946713600)
     {
         console.log("This is a 2000's game!");
-        if (dateChoice == 3000 || 2000)
+        if (dateChoice == 3000 ||  dateChoice == 2000)
         { 
             return true;
         }
@@ -343,7 +394,7 @@ function checkDate(test, num)
     else if (test.releaseDate <= 946713599 && test.releaseDate >= 631180800)
     {
         console.log("This is a 1990's game!");
-        if (dateChoice == 3000 || 1990)
+        if (dateChoice == 3000 ||  dateChoice == 1990)
         { 
             return true;
         }
@@ -351,7 +402,7 @@ function checkDate(test, num)
     else if (test.releaseDate <= 631180799 && test.releaseDate >= 315561600)
     {
         console.log("This is a 1980's game!");
-        if (dateChoice == 3000 || 1980)
+        if (dateChoice == 3000 ||  dateChoice == 1980)
         { 
             return true;
         }
@@ -360,7 +411,7 @@ function checkDate(test, num)
         console.log("Out of time Frame!");
     }
     console.log(timeDate)
-
+    wrongDate++
     return false;
 };
 
@@ -384,6 +435,9 @@ function checkRating(rating)
         {
             console.log("This product is Overwhelmingly Positive");
             return true;
+        }
+        else{
+            wrongRank++;
         } 
     }
     if(veryPos)
@@ -393,6 +447,9 @@ function checkRating(rating)
         {
             console.log("This product is Very Positive");
             return true;
+        }
+        else{
+            wrongRank++;
         } 
     }
     if(mostPos)
@@ -402,6 +459,9 @@ function checkRating(rating)
         {
             console.log("This product is Mostly Positive");
             return true;
+        }
+        else{
+            wrongRank++;
         } 
     }
     if(justPos)
@@ -411,6 +471,9 @@ function checkRating(rating)
         {
             console.log("This product is Just Positive");
             return true;
+        }
+        else{
+            wrongRank++;
         } 
     }
     if(mixed)
@@ -420,6 +483,9 @@ function checkRating(rating)
         {
             console.log("This product is Mixed");
             return true;
+        }
+        else{
+            wrongRank++;
         } 
     }
     if(justNeg)
@@ -429,6 +495,9 @@ function checkRating(rating)
         {
             console.log("This product is Just Negative");
             return true;
+        }
+        else{
+            wrongRank++;
         } 
     }
     
@@ -439,6 +508,9 @@ function checkRating(rating)
         {
             console.log("This product is Mostly Negative");
             return true;
+        }
+        else{
+            wrongRank++;
         } 
     }
     if(veryNeg)
@@ -448,6 +520,9 @@ function checkRating(rating)
         {
             console.log("This product is Very Negative");
             return true;
+        }
+        else{
+            wrongRank++;
         } 
     }
     if(overNeg)
@@ -458,6 +533,9 @@ function checkRating(rating)
             console.log("This product is Overwhelmly Negative");
             return true;
         } 
+        else{
+            wrongRank++;
+        }
     }
     else
     {
@@ -469,6 +547,8 @@ function checkRating(rating)
                 console.log("This product has no rating.");
                 return true;
             }
+            wrongRank++
+
         }
 
         return false;
