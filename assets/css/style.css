@@ -11,3 +11,17 @@ div {
     padding-bottom: 48px !important;
     word-break: break-word;
 }
+
+body {
+    background-color: #04275c;
+}
+
+#games {
+    display: flex;
+    flex-wrap: wrap;
+    /* justify-content:space-between; */
+}
+
+#filterSubmit {
+    margin-top: 20px;
+}
