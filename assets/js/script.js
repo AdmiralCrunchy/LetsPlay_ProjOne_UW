@@ -153,11 +153,16 @@ function parsingResults()
             var games = document.querySelector(`#games`)
             games.appendChild(card)
             
+<<<<<<< HEAD
+
+
+=======
             // populating wikipedia virtual game list
             let hiddenGameChild = document.createElement('div');
             hiddenGameChild.setAttribute('class','default-hidden');
             hiddenGameChild.textContent = gamesListArray[i].title;
             $('#games-anchor').append(hiddenGameChild);
+>>>>>>> dev
         }
         
         // once cards loads, fire the wikipedia trigger
