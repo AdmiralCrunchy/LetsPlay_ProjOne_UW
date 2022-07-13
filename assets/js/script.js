@@ -477,7 +477,7 @@ function checkRating(rating)
 
 };
 
-// $('.dropdown-trigger').dropdown();
+$('.dropdown-trigger').dropdown();
 
 //Pulling information
         // console.log(data[i].title, data[i].salePrice, data[i].steamRatingText, data[i].storeID, data[i].thumb, "https://store.steampowered.com/app/"+data[i].steamAppID, "https://metacritic.com/"+data[i].metacriticLink, "Release Date in UNIX: ", data[i].releaseDate)
