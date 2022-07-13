@@ -176,21 +176,22 @@ function setup() {
         cardImageSpan.setAttribute('class','card-title');
         cardContentDiv.setAttribute('class','card-content');
         aLinkDiv.setAttribute('class','card-action');
+        flexContainer.setAttribute('class','col s12 m6 l4');
 
         // attach to anchor
-        $('#renderAnchor').append(cardContainer);
+        $('#renderAnchor').append(flexContainer);
+        flexContainer.append(cardContainer);
         cardContainer.append(cardImageDiv, cardContentDiv, aLinkDiv);
-        cardImageDiv.append(cardImage, cardImageSpan);
+        cardImageDiv.append(cardImage);
         cardContentDiv.appendChild(cardParagraph);
         aLinkDiv.appendChild(aLink);
-
 
         // add content 
         cardImage.setAttribute('src', dict[title].imageSrc); // {title : {imageSrc}}
         cardImageSpan.textContent = dict[title].imageName.substring(5); // {title : {imageName}}
         cardParagraph.textContent = dict[title].contentExtracted; // {title : {contentExtracted}}
         aLink.setAttribute('href', dict[title].link); // {title : {link}}
-        aLink.textContent = 'Wikipedia link'; // target="_blank"
+        aLink.textContent = 'Wikipedia link'; 
         aLink.setAttribute('target', '_blank');
     }
 
