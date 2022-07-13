@@ -14,7 +14,7 @@ div {
 }
 
 .card-action {
-    bottom: -1em;
+    bottom: -1em!important;
 }
 
 body {
