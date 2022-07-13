@@ -13,6 +13,10 @@ div {
     background-color: #0646a6;
 }
 
+.card-action {
+    bottom: -1em!important;
+}
+
 body {
     background-color: #04275c;
 }
