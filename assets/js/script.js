@@ -62,9 +62,10 @@ function parsingResults()
     // clear cards
     function empty() {
         $(games).empty();
+        $('#games-anchor').empty();
     }
     empty();
-    gamesListArray = []
+    gamesListArray = [];
 
 
     var dateNum;
@@ -152,12 +153,20 @@ function parsingResults()
             var games = document.querySelector(`#games`)
             games.appendChild(card)
             
-            
-
+            // populating wikipedia virtual game list
+            let hiddenGameChild = document.createElement('div');
+            hiddenGameChild.setAttribute('class','default-hidden');
+            hiddenGameChild.textContent = gamesListArray[i].title;
+            $('#games-anchor').append(hiddenGameChild);
         }
-
-
-
+        
+        // once cards loads, fire the wikipedia trigger
+        console.log({event: 'done rendering'});
+        function buttonclick(){
+            var selfReady= document.getElementById("hidden-activator");
+            selfReady.click();
+        }
+        buttonclick();
     });
 
 };

@@ -14,10 +14,10 @@ function setup() {
     noCanvas(); // removes the default canvas that p5 renders
     let userInputs = select('#funky-button'); // target: array of games
     // userInputs.changed(itemHandler); // listener: when the array updates from null to have items in array
-    $('#funky-button').click(function() {itemHandler()});
+    $('#hidden-activator').click(function() {itemHandler()});
 
     function itemHandler() {
-        let inputLength = $('#wiki-anchor').children().length;
+        let inputLength = $('#games-anchor').children().length;
 
         // attach carousel container
         // let carouselContainer = document.createElement('div');
@@ -27,11 +27,11 @@ function setup() {
 
 
         if (!inputLength) {
-            alert("Nothing was added to the #userinput")
+            alert("Nothing inside of Game Results!")
             return;
         }
         console.log('button changed'); // debug working
-        $('#wiki-anchor').children('div').each(function () {
+        $('#games-anchor').children('div').each(function () {
             let game_title = $(this)[0].innerText;
             console.log({loop_1: game_title});
             goWiki(game_title);
@@ -115,7 +115,7 @@ function setup() {
         if(imageAddrs) {
             gotImage(imageAddrs, title); 
         } else {
-            alert("no image found");
+            console.log("no image found");
         }
 
     }
@@ -125,14 +125,14 @@ function setup() {
         const regex = new RegExp('\.(png|jpg)$'); // only get png or jpg 
 
         let returnArr = imageTitles.map(
-            iTitle => // item title is safe
+            iTitle => // iTitle is safe
             (regex.test(iTitle)) ? iTitle : null
         );
         // console.log(returnArr);
         for(let i = 0; i < imageTitles.length; i++) {
             if(returnArr[i]){
                 console.log('inside gotNonSvg'+imageTitles[i]); // debug: working 
-                return imageTitles[i]
+                return imageTitles[i];
             }
         }
         console.log('bottom of gotNonSvg, no truthy found in returnArr'); // debug: working, never reached
@@ -144,15 +144,18 @@ function setup() {
         let imageName = image;
         let imageSrc = imageUrl + image;
         $.extend(dict[title], {imageSrc}, {imageName});
-        console.log({'inside gotImage and inspect dict[title]': dict[title]}); // debug: 
+        console.log({'inside gotImage and inspect dict[title]': dict[title]}); // debug: working
 
         createDOM(title);
     }
 
     function createDOM(title) {
-        let curr_children_Count = $('#carousel-container > div').length;
-        console.log({'createDOM look inside dict' :dict[title],
-        'current children count': curr_children_Count });
+
+        console.log({'createDOM look inside dict' :dict[title], title});
+        if(!dict[title]) { //if nothing inside, don't create the card
+            console.log({'dev error': `${title} has no entry on Wikipedia.`});
+            return;
+        }
         
         // create Elements
         // let carouselItem = document.createElement('div');
@@ -195,32 +198,10 @@ function setup() {
         aLink.setAttribute('target', '_blank');
     }
 
-    function getHref(curr_children_Count) {
-        // need to fix
-
-        let result = curr_children_Count + 1;
-        console.log({'result in getHref': result, curr_children_Count});
-        if(result == 1) {
-            return("#one!");
-        } else if(result == 2) {
-            return("#two!");
-        } else if(result == 3) {
-            return("#three!");
-        } else if(result == 4) {
-            return("#four!");
-        } else if(result == 5) {
-            return("#five!");
-        } else 
-            return;
-        return;
-
-        
-    }
 }
 
 
 $('#funky-button').click(function() {
-    console.log('clicked') // debug working
     let curr_val = $(this).text();
     if(curr_val == "click"){
         $('#funky-button').text("clack");
@@ -230,12 +211,3 @@ $('#funky-button').click(function() {
 });
 
 
-
-// function initCarousel() {
-//     $('.carousel.carousel-slider').carousel(
-//         {
-//             fullWidth: true,
-//             indicators: true
-//         }
-//     ); 
-// }

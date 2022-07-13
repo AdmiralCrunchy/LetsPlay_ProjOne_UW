@@ -10,6 +10,7 @@ div {
     overflow-y: scroll !important;
     padding-bottom: 48px !important;
     word-break: break-word;
+    background-color: #0646a6;
 }
 
 body {
