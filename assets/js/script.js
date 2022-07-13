@@ -68,7 +68,8 @@ function parsingResults()
     // clear cards
     function empty() {
         $(games).empty();
-        $('#games-anchor').empty();
+        $(gamesAnchor).empty();
+        $(renderAnchor).empty();
     }
     empty();
     gamesListArray = [];
@@ -207,7 +208,7 @@ function parsingResults()
             let hiddenGameChild = document.createElement('div');
             hiddenGameChild.setAttribute('class','default-hidden');
             hiddenGameChild.textContent = gamesListArray[i].title;
-            $('#games-anchor').append(hiddenGameChild);
+            $('#gamesAnchor').append(hiddenGameChild);
         }
         
         // once cards loads, fire the wikipedia trigger
